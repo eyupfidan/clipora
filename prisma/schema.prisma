@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Note {
+  id         String      @id @default(cuid())
+  title      String      @default("")
+  content    String      @default("")
+  color      String      @default("#ffffff")
+  isPinned   Boolean     @default(false)
+  isArchived Boolean     @default(false)
+  isDeleted  Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  labels     NoteLabel[]
+}
+
+model Label {
+  id        String      @id @default(cuid())
+  name      String      @unique
+  createdAt DateTime    @default(now())
+  notes     NoteLabel[]
+}
+
+model NoteLabel {
+  noteId  String
+  labelId String
+  note    Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  label   Label  @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([noteId, labelId])
+}
