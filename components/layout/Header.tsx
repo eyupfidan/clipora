@@ -2,7 +2,7 @@
 
 import { Grid2X2, List, Menu, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { clsx } from "clsx";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LANGUAGES, type LanguageCode } from "@/lib/i18n";
@@ -16,13 +16,16 @@ export function Header({ onMenuClick }: HeaderProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { language, setLanguage, t } = useLanguage();
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
+  const urlQuery = searchParams.get("q") ?? "";
+  const [query, setQuery] = useState(urlQuery);
+  const [prevUrlQuery, setPrevUrlQuery] = useState(urlQuery);
   const [isPending, startTransition] = useTransition();
   const view = searchParams.get("view") === "list" ? "list" : "grid";
 
-  useEffect(() => {
-    setQuery(searchParams.get("q") ?? "");
-  }, [searchParams]);
+  if (urlQuery !== prevUrlQuery) {
+    setPrevUrlQuery(urlQuery);
+    setQuery(urlQuery);
+  }
 
   const baseParams = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
 

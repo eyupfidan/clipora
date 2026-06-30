@@ -33,7 +33,10 @@ export function LanguageProvider({
   useEffect(() => {
     const storedLanguage = window.localStorage.getItem("keep-notes-language");
     if (isLanguageCode(storedLanguage) && storedLanguage !== language) {
-      setLanguageState(storedLanguage);
+      // Sync client-only storage after hydration without blocking the initial render.
+      queueMicrotask(() => {
+        setLanguageState(storedLanguage);
+      });
     }
   }, [language]);
 
