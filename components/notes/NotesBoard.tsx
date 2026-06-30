@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { EmptyState } from "@/components/EmptyState";
-import { useLanguage } from "@/components/LanguageProvider";
-import { MasonryGrid } from "@/components/MasonryGrid";
-import { NoteCard } from "@/components/NoteCard";
-import { NoteEditor } from "@/components/NoteEditor";
-import { NoteModal } from "@/components/NoteModal";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { MasonryGrid } from "@/components/ui/MasonryGrid";
+import { NoteCard } from "@/components/notes/NoteCard";
+import { NoteEditor } from "@/components/notes/NoteEditor";
+import { NoteModal } from "@/components/notes/NoteModal";
 import type { TranslationKey } from "@/lib/i18n";
 import type { LabelSummary, NotesViewMode, NoteWithLabels } from "@/types/note";
 

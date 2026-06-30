@@ -2,7 +2,7 @@
 
 import { Plus, X } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useLanguage } from "@/components/LanguageProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import type { LabelSummary } from "@/types/note";
 
 type LabelPickerProps = {

@@ -4,7 +4,7 @@ import { Grid2X2, List, Menu, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { clsx } from "clsx";
-import { useLanguage } from "@/components/LanguageProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LANGUAGES, type LanguageCode } from "@/lib/i18n";
 
 type HeaderProps = {

@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { useLanguage } from "@/components/LanguageProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import type { TranslationKey } from "@/lib/i18n";
 import type { LabelSummary } from "@/types/note";
 

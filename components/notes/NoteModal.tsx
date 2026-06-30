@@ -9,10 +9,10 @@ import {
   setNotePinned,
   updateNote
 } from "@/app/actions";
-import { ColorPicker } from "@/components/ColorPicker";
-import { useLanguage } from "@/components/LanguageProvider";
-import { LabelPicker } from "@/components/LabelPicker";
-import { NoteToolbar } from "@/components/NoteToolbar";
+import { ColorPicker } from "@/components/notes/ColorPicker";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { LabelPicker } from "@/components/notes/LabelPicker";
+import { NoteToolbar } from "@/components/notes/NoteToolbar";
 import type { LabelSummary, NoteWithLabels } from "@/types/note";
 
 type NoteModalProps = {

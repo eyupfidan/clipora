@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AppShell } from "@/components/AppShell";
+import { AppShell } from "@/components/layout/AppShell";
 import { DEFAULT_LANGUAGE, LANGUAGES, type LanguageCode } from "@/lib/i18n";
 import { getLabels } from "@/lib/notes";
 

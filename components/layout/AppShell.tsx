@@ -3,9 +3,9 @@
 import { Suspense } from "react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Header } from "@/components/Header";
-import { LanguageProvider } from "@/components/LanguageProvider";
-import { Sidebar } from "@/components/Sidebar";
+import { Header } from "@/components/layout/Header";
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
+import { Sidebar } from "@/components/layout/Sidebar";
 import type { LanguageCode } from "@/lib/i18n";
 import type { LabelSummary } from "@/types/note";
 

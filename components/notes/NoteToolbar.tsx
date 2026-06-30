@@ -2,7 +2,7 @@
 
 import { Archive, ArchiveRestore, Pin, PinOff, RotateCcw, Trash2, X } from "lucide-react";
 import { clsx } from "clsx";
-import { useLanguage } from "@/components/LanguageProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 type NoteToolbarProps = {
   isPinned?: boolean;

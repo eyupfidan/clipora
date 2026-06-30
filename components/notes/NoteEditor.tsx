@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 import { createNote } from "@/app/actions";
-import { ColorPicker } from "@/components/ColorPicker";
-import { useLanguage } from "@/components/LanguageProvider";
-import { LabelPicker } from "@/components/LabelPicker";
-import { NoteToolbar } from "@/components/NoteToolbar";
+import { ColorPicker } from "@/components/notes/ColorPicker";
+import { useLanguage } from "@/components/providers/LanguageProvider";
+import { LabelPicker } from "@/components/notes/LabelPicker";
+import { NoteToolbar } from "@/components/notes/NoteToolbar";
 import { DEFAULT_NOTE_COLOR } from "@/lib/colors";
 import type { LabelSummary } from "@/types/note";
 

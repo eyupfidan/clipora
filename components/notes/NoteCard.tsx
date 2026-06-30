@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { hardDeleteNote, setNoteArchived, setNoteDeleted, setNotePinned } from "@/app/actions";
-import { NoteToolbar } from "@/components/NoteToolbar";
+import { NoteToolbar } from "@/components/notes/NoteToolbar";
 import type { NoteWithLabels } from "@/types/note";
 
 type NoteCardProps = {

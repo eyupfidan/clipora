@@ -1,4 +1,4 @@
-import { NotesBoard } from "@/components/NotesBoard";
+import { NotesBoard } from "@/components/notes/NotesBoard";
 import { getLabels, getNotes } from "@/lib/notes";
 import type { NotesViewMode } from "@/types/note";
 
