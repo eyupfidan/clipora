@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 import { useEffect, useState, useTransition } from "react";
 import {
   hardDeleteNote,
@@ -37,8 +38,14 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
     function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
     }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleEscape);
+    };
   }, [onClose]);
 
   function saveAndClose() {
@@ -71,10 +78,15 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
     });
   }
 
-  return (
-    <div className="fixed inset-0 z-50 grid animate-fade-in place-items-center bg-black/40 p-4" onMouseDown={onClose}>
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[100] flex animate-fade-in items-center justify-center overflow-y-auto bg-black/55 p-4"
+      onMouseDown={onClose}
+    >
       <section
-        className="max-h-[90vh] w-full max-w-2xl animate-modal-panel-in overflow-auto rounded-lg border border-[#dadce0] p-5 shadow-keep"
+        className="my-auto max-h-[calc(100vh-2rem)] w-full max-w-2xl animate-modal-panel-in overflow-y-auto rounded-lg border border-[#dadce0] p-5 shadow-keep"
         style={{ backgroundColor: color }}
         onMouseDown={(event) => event.stopPropagation()}
       >
@@ -140,6 +152,7 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
           </div>
         </div>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }
