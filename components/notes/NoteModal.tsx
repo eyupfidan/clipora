@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { ListChecks } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useEffect, useState, useTransition } from "react";
 import {
@@ -10,10 +11,19 @@ import {
   setNotePinned,
   updateNote
 } from "@/app/actions";
+import { ChecklistEditor } from "@/components/notes/ChecklistEditor";
 import { ColorPicker } from "@/components/notes/ColorPicker";
+import { LinkPreviewList } from "@/components/notes/LinkPreviewList";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LabelPicker } from "@/components/notes/LabelPicker";
 import { NoteToolbar } from "@/components/notes/NoteToolbar";
+import {
+  checklistItemsToText,
+  hasChecklistContent,
+  parseChecklistItems,
+  serializeChecklistItems,
+  textToChecklistItems
+} from "@/lib/note-content";
 import type { LabelSummary, NoteWithLabels } from "@/types/note";
 
 type NoteModalProps = {
@@ -26,6 +36,11 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
   const router = useRouter();
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
+  const [isChecklist, setIsChecklist] = useState(hasChecklistContent(note.content));
+  const [checklistItems, setChecklistItems] = useState(() => {
+    const parsedItems = parseChecklistItems(note.content);
+    return parsedItems.length > 0 ? parsedItems : textToChecklistItems(note.content);
+  });
   const [color, setColor] = useState(note.color);
   const [isPinned, setIsPinned] = useState(note.isPinned);
   const [isArchived, setIsArchived] = useState(note.isArchived);
@@ -49,10 +64,12 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
   }, [onClose]);
 
   function saveAndClose() {
+    const nextContent = isChecklist ? serializeChecklistItems(checklistItems) : content;
+
     startTransition(async () => {
       const result = await updateNote(note.id, {
         title,
-        content,
+        content: nextContent,
         color,
         isPinned,
         isArchived,
@@ -70,6 +87,17 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
     });
   }
 
+  function toggleChecklistMode() {
+    if (isChecklist) {
+      setContent(checklistItemsToText(checklistItems));
+      setIsChecklist(false);
+      return;
+    }
+
+    setChecklistItems(textToChecklistItems(content));
+    setIsChecklist(true);
+  }
+
   function runAction(action: () => Promise<unknown>, close = true) {
     startTransition(async () => {
       await action();
@@ -79,6 +107,9 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
   }
 
   if (typeof document === "undefined") return null;
+
+  const editorContent = isChecklist ? serializeChecklistItems(checklistItems) : content;
+  const hasContent = title.trim() || (isChecklist ? checklistItems.some((item) => item.text.trim()) : content.trim());
 
   return createPortal(
     <div
@@ -107,30 +138,50 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
             }}
           />
         </div>
-        <textarea
-          value={content}
-          onChange={(event) => setContent(event.target.value)}
-          placeholder={t("takeNote")}
-          rows={8}
-          className="mt-3 w-full resize-none bg-transparent text-sm leading-6 outline-none placeholder:text-[#5f6368]"
-        />
+        {isChecklist ? (
+          <ChecklistEditor items={checklistItems} onChange={setChecklistItems} />
+        ) : (
+          <textarea
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+            placeholder={t("takeNote")}
+            rows={8}
+            className="mt-3 w-full resize-none bg-transparent text-sm leading-6 outline-none placeholder:text-[#5f6368]"
+          />
+        )}
+        <LinkPreviewList content={editorContent} />
         <div className="mt-4 space-y-4">
           <LabelPicker availableLabels={labels} selectedNames={labelNames} onChange={setLabelNames} />
           <ColorPicker value={color} onChange={setColor} />
         </div>
         {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-          <NoteToolbar
-            isPinned={isPinned}
-            isArchived={isArchived}
-            isDeleted={note.isDeleted}
-            disabled={isPending}
-            onPin={() => runAction(() => setNotePinned(note.id, !note.isPinned), false)}
-            onArchive={() => runAction(() => setNoteArchived(note.id, !note.isArchived))}
-            onDelete={() => runAction(() => setNoteDeleted(note.id, true))}
-            onRestore={() => runAction(() => setNoteDeleted(note.id, false))}
-            onHardDelete={() => runAction(() => hardDeleteNote(note.id))}
-          />
+          <div className="flex items-center gap-1">
+            <NoteToolbar
+              isPinned={isPinned}
+              isArchived={isArchived}
+              isDeleted={note.isDeleted}
+              disabled={isPending}
+              onPin={() => runAction(() => setNotePinned(note.id, !note.isPinned), false)}
+              onArchive={() => runAction(() => setNoteArchived(note.id, !note.isArchived))}
+              onDelete={() => runAction(() => setNoteDeleted(note.id, true))}
+              onRestore={() => runAction(() => setNoteDeleted(note.id, false))}
+              onHardDelete={() => runAction(() => hardDeleteNote(note.id))}
+            />
+            <button
+              type="button"
+              aria-label={t("checklist")}
+              title={t("checklist")}
+              className={[
+                "grid h-9 w-9 place-items-center rounded-full text-[#5f6368] transition hover:bg-black/10 hover:text-[#202124]",
+                isChecklist ? "bg-black/10 text-[#202124]" : ""
+              ].join(" ")}
+              onClick={toggleChecklistMode}
+              disabled={isPending}
+            >
+              <ListChecks size={18} />
+            </button>
+          </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-[#5f6368]">{isPending ? t("saving") : ""}</span>
             <button
@@ -145,7 +196,7 @@ export function NoteModal({ note, labels, onClose }: NoteModalProps) {
               type="button"
               className="rounded bg-[#fbbc04] px-5 py-2 text-sm font-medium text-[#202124] hover:bg-[#f9ab00] disabled:opacity-60"
               onClick={saveAndClose}
-              disabled={isPending || (!title.trim() && !content.trim())}
+              disabled={isPending || !hasContent}
             >
               {t("save")}
             </button>

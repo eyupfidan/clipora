@@ -16,8 +16,8 @@ export function MasonryGrid({ view, children }: MasonryGridProps) {
   return (
     <div
       className={clsx(
-        "masonry-grid mx-auto max-w-7xl",
-        "columns-1 sm:columns-2 lg:columns-3 2xl:columns-4"
+        "masonry-grid mx-auto max-w-[820px]",
+        "columns-1 sm:columns-2 xl:columns-3"
       )}
     >
       {children}
