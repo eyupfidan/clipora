@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { hardDeleteNote, setNoteArchived, setNoteContent, setNoteDeleted, setNotePinned } from "@/app/actions";
+import { hardDeleteNote, setNoteArchived, setNoteContent, setNoteDeleted, setNotePinned } from "@/app/actions/note-actions";
 import { LinkPreviewList } from "@/components/notes/LinkPreviewList";
 import { NoteContentPreview } from "@/components/notes/NoteContentPreview";
 import { NoteToolbar } from "@/components/notes/NoteToolbar";

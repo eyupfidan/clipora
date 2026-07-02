@@ -2,7 +2,7 @@
 
 import { ExternalLink } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { getLinkPreviews } from "@/app/actions";
+import { getLinkPreviews } from "@/app/actions/link-preview-actions";
 import { extractUrls, getHostname, type LinkPreview } from "@/lib/note-content";
 
 type LinkPreviewListProps = {

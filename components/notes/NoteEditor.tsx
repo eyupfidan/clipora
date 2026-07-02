@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
-import { createNote } from "@/app/actions";
+import { createNote } from "@/app/actions/note-actions";
 import { ColorPicker } from "@/components/notes/ColorPicker";
 import { useLanguage } from "@/components/providers/LanguageProvider";
 import { LabelPicker } from "@/components/notes/LabelPicker";

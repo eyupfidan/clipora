@@ -10,7 +10,7 @@ import {
   setNoteDeleted,
   setNotePinned,
   updateNote
-} from "@/app/actions";
+} from "@/app/actions/note-actions";
 import { ChecklistEditor } from "@/components/notes/ChecklistEditor";
 import { ColorPicker } from "@/components/notes/ColorPicker";
 import { LinkPreviewList } from "@/components/notes/LinkPreviewList";
